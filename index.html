@@ -118,6 +118,7 @@
     .project-index { display: inline-flex; align-items: center; gap: .55rem; color: #147b74; font-weight: 900; font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; }
     .project-index::before { content: ""; width: 26px; height: 3px; border-radius: 3px; background: var(--coral); }
     h3 { margin: .65rem 0 .6rem; font-size: clamp(1.5rem, 2.5vw, 2rem); line-height: 1.35; letter-spacing: -.035em; }
+    #hemily h3 { word-break: keep-all; text-wrap: balance; }
     .project-lead { margin: 0; color: var(--ink-2); font-size: 1.125rem; }
     .role { margin: .8rem 0 0; color: var(--ink-2); font-size: 1rem; }
     .role strong { color: #11665e; }
@@ -230,8 +231,8 @@
       <div class="shell proof-grid">
         <div class="proof"><strong>5년</strong><span>스포츠 · 헬스케어 현장 경험</span></div>
         <div class="proof"><strong>1위</strong><span>암종 분류 해커톤</span></div>
-        <div class="proof"><strong>1,212</strong><span>RxVita 문서 처리</span></div>
-        <div class="proof"><strong>285</strong><span>도핑 챗봇 회귀 테스트 통과</span></div>
+        <div class="proof"><strong>+49.2%p</strong><span>챗봇 답변 기준 충족률 · 39/118 → 97/118</span></div>
+        <div class="proof"><strong>+58.7%p</strong><span>리포트 제품 근거 충족률 · 15/46 → 42/46</span></div>
       </div>
     </aside>
 
@@ -265,10 +266,55 @@
       </header>
 
       <div class="projects">
+        <article class="project" id="hemily">
+          <div class="project-hero">
+            <div class="project-copy">
+              <span class="project-index">Project 01 · 2026.10–11</span>
+              <h3>헤밀리헬스 — 건강정보 챗봇 · 추천 리포트</h3>
+              <p class="project-lead">운영 중인 백엔드를 인수해 <mark>제품 원문 기반 답변과 설문 기반 추천 사유</mark>를 고도화</p>
+              <p class="role"><strong>챗봇 · 리포트 백엔드 담당</strong> · 직접 조회와 RAG 분기 · 추천 사유 조립 · Langfuse 계측 · 개발·운영 검증</p>
+              <div class="metrics">
+                <div class="metric"><strong>+49.2%p</strong><span>챗봇 답변 기준 충족 · 39/118 → 97/118</span></div>
+                <div class="metric"><strong>약 47% 단축</strong><span>챗봇 완료 중앙값 · 5.091초 → 2.699초</span></div>
+                <div class="metric"><strong>+58.7%p</strong><span>리포트 제품 근거 충족 · 15/46 → 42/46</span></div>
+              </div>
+              <p class="evidence-note">동일 데이터·모델에서 인수 코드와 개선 코드를 비교. 품질은 버전별 59개 시나리오 × 일반·해밀리안 두 계정, 시간은 공통 정상 완료 100쌍, 리포트는 동일 설문·추천 제품 46행 기준.</p>
+              <div class="stack" aria-label="기술 스택"><span>Python</span><span>FastAPI</span><span>PostgreSQL / pgvector</span><span>Vertex AI</span><span>Langfuse</span><span>Celery / Redis</span><span>Docker</span></div>
+              <div class="project-links"><a class="text-link" href="https://app.notion.com/p/415d4c439bd6808cbe59db73591e79c3" target="_blank" rel="noreferrer">상세 기록 보기 ↗</a></div>
+            </div>
+            <figure class="project-visual contain">
+              <a href="images/hemily-chatbot-architecture.png" target="_blank" rel="noreferrer"><img src="images/hemily-chatbot-architecture.png" width="1888" height="956" loading="lazy" alt="챗봇 아키텍처. 회원 질문을 안전 안내, 제품 원문 직접 조회, 검색 근거 기반 생성으로 분기해 SSE로 전달하고 저장하는 흐름"></a>
+              <figcaption class="evidence-note">챗봇 아키텍처 · 질문에 따라 직접 조회, 검색 근거 기반 생성, 안전 안내로 분기</figcaption>
+            </figure>
+            <details class="evidence-note">
+              <summary>리포트 아키텍처 보기</summary>
+              <figure class="project-visual contain">
+                <a href="images/hemily-report-architecture.png" target="_blank" rel="noreferrer"><img src="images/hemily-report-architecture.png" width="1888" height="668" loading="lazy" alt="리포트 아키텍처. 설문과 규칙으로 제품을 선정하고, 선정 사실과 제품 원문을 조합해 추천 사유를 저장하는 흐름"></a>
+                <figcaption class="evidence-note">리포트 아키텍처 · 설문 확인부터 제품 선정, 추천 사유 조립 및 저장까지의 흐름</figcaption>
+              </figure>
+            </details>
+          </div>
+          <div class="paar" aria-label="헤밀리헬스 PAARL 정리">
+            <div class="step"><b>Problem</b><p>기존 제품 검색·리포트 생성 흐름에서 명확한 제품 질문에도 모델 호출이 이어지고, 후속 질문에서 제품 참조나 출처 누락. 추천 사유에는 제품 원문의 기능·수치 누락과 빈 결과 재사용 발생</p></div>
+            <div class="step"><b>Analyze</b><p>같은 질문을 일반·해밀리안 역할로 실행해 <mark>등록 원문 → 검색 후보 → 최종 문맥 → 답변</mark>의 단계별 누락 확인. 리포트는 제품 선정 사실과 200자 안에 담을 제품 원문을 나눠 검토</p></div>
+            <div class="step"><b>Action</b><p>확정 가능한 제품 정보는 <mark>등록 원문 직접 조회</mark>, 설명·추천은 관계 조회와 pgvector 검색으로 분기. 후속 제품 ID와 실제 답변의 카드·출처 연결 보완. 리포트는 <mark>선정 사실과 검증된 원문 인용을 분리</mark>해 추천 사유 조립</p></div>
+            <div class="step"><b>Result</b><p>핵심 제품 조회의 카드·출처 표시 <mark>8/10 → 10/10</mark>. 동일 설문·추천 제품 비교에서 리포트 추천 사유 제공 <mark>20/46 → 46/46</mark>. 운영 테스트 계정에서 챗봇 출처·저장과 신규 리포트 생성·재사용 확인</p></div>
+            <div class="step"><b>Learn</b><p>섭취량과 병용 주의의 표현 차이가 사용자 판단에 영향을 줄 수 있어 최종 답변의 <code>temperature</code>를 0으로 설정. 반복 답변 문구 일치 <mark>1/80 → 61/80</mark>, 원문 충실도는 두 설정 모두 47/48. 근거 전달은 등록 원문 조회와 출처 대조로 검증</p></div>
+          </div>
+          <details class="evidence-note">
+            <summary>비용·측정 조건·운영 검증 보기</summary>
+            <ul>
+              <li>챗봇 추정 비용 <strong>$0.586 → $0.782</strong>. 각 118건에서 확인된 생성·임베딩 사용량 기준이며, 사용량 미확인 호출 9회 → 32회. 정상 완료·저장 117/118 → 101/118, 비교 실행 중 공급자 429 오류 3회 → 30회.</li>
+              <li>공통 정상 완료 100쌍만 비교하면 답변 기준 충족률 35% → 96%. 직전 제품을 이어 묻는 별도 사례에서는 일반·해밀리안 각 1건에서 직접 조회로 준비 단계 모델 호출 3회 → 0회.</li>
+              <li>운영 일반 테스트 계정에서 챗봇 3/3건의 출처·완료 신호·저장 확인. 동일 설문으로 신규 리포트 생성·재사용과 추천 사유 24/24행 저장 확인.</li>
+            </ul>
+          </details>
+        </article>
+
         <article class="project" id="rxvita">
           <div class="project-hero">
             <div class="project-copy">
-              <span class="project-index">Project 01 · 2026.08–09</span>
+              <span class="project-index">Project 02 · 2026.08–09</span>
               <h3>RxVita — 복약 · 영양제 상담 챗봇</h3>
               <p class="project-lead">복약정보와 공식 문서를 연결하는 <mark>근거 기반 RAG 상담</mark>을 구현</p>
               <p class="role"><strong>RAG · Chatbot 담당</strong> · 문서 전처리 · 검색 · 근거 검증 · API 연동 · 평가 · 추적</p>
@@ -296,7 +342,7 @@
         <article class="project" id="cancer">
           <div class="project-hero">
             <div class="project-copy">
-              <span class="project-index">Project 02 · 2026.07–08</span>
+              <span class="project-index">Project 03 · 2026.07–08</span>
               <h3>유전체 변이 기반 26개 암종 분류</h3>
               <p class="project-lead">변이를 <mark>암종별 증거 점수</mark>로 압축하고, 누수 검증을 제출 조건으로 구현</p>
               <p class="role"><strong>담당</strong> · 변이 파싱 · 피처 설계 · Empirical-Bayes 모델링 · OOF 검증</p>
@@ -322,7 +368,7 @@
         <article class="project" id="doping">
           <div class="project-hero">
             <div class="project-copy">
-              <span class="project-index">Project 03 · 2026.07</span>
+              <span class="project-index">Project 04 · 2026.07</span>
               <h3>KADA/WADA 도핑 정보 챗봇</h3>
               <p class="project-lead">규정 설명과 약물 조회를 분리해 <mark>공식 근거로 답하는 챗봇</mark> 구현</p>
               <p class="role"><strong>개인 프로젝트</strong> · PDF 전처리 · RAG · KADA Tool · API/UI · 평가</p>
@@ -349,7 +395,7 @@
         <article class="project" id="xray">
           <div class="project-hero">
             <div class="project-copy">
-              <span class="project-index">Project 04 · 2026.06–07</span>
+              <span class="project-index">Project 05 · 2026.06–07</span>
               <h3>흉부 X-ray 정상 · 폐렴 분류</h3>
               <p class="project-lead"><mark>오류 분석과 약한 증강</mark>을 바탕으로 전이학습 모델 개선</p>
               <p class="role"><strong>개인 프로젝트</strong> · PyTorch 모델링 · 실험 비교 · Grad-CAM 오류 분석</p>
